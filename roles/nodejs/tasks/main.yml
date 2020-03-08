@@ -1,0 +1,7 @@
+- import_tasks: armv6.yml
+  when: ansible_architecture == 'armv6l'
+- import_role:
+    name: geerlingguy.nodejs
+  vars:
+    nodejs_version: "12.x"
+  when: ansible_architecture != 'armv6l'

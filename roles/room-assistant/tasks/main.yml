@@ -1,0 +1,109 @@
+---
+- name: Install system dependencies
+  become: yes
+  apt:
+    update_cache: yes
+    pkg:
+      - libavahi-compat-libdnssd-dev
+      - bluetooth
+      - libbluetooth-dev
+      - libudev-dev
+      - build-essential
+- name: Install room-assistant
+  become: yes
+  npm:
+    name: room-assistant
+    version: "{{ room_assistant_version }}"
+    global: yes
+    unsafe_perm: yes
+- name: Find NodeJS
+  find:
+    paths:
+      - /usr/bin
+      - /usr/local/bin
+    patterns: node
+    follow: yes
+  register: find_node
+- name: Set node capabilities
+  become: yes
+  capabilities:
+    path: "{{ item.path }}"
+    capability: cap_net_raw+eip
+    state: present
+  with_items: "{{ find_node.files }}"
+- name: Find hcitool
+  find:
+    paths:
+      - /usr/bin
+      - /usr/local/bin
+    patterns: hcitool
+    follow: yes
+  register: find_hcitool
+- name: Set hcitool capabilities
+  become: yes
+  capabilities:
+    path: "{{ item.path }}"
+    capability: cap_net_raw+eip
+    state: present
+  with_items: "{{ find_hcitool.files }}"
+- name: Find hciconfig
+  find:
+    paths:
+      - /usr/bin
+      - /usr/local/bin
+    patterns: hciconfig
+    follow: yes
+  register: find_hciconfig
+- name: Set hciconfig capabilities
+  become: yes
+  capabilities:
+    path: "{{ item.path }}"
+    capability: cap_net_admin+eip
+    state: present
+  with_items: "{{ find_hciconfig.files }}"
+- name: Create config directory
+  file:
+    path: ~/room-assistant/config
+    state: directory
+- name: Create global config file
+  when: room_assistant_global_config is defined
+  copy:
+    dest: "~/room-assistant/config/{{ ansible_hostname }}.yml"
+    content: "{{ room_assistant_global_config | to_nice_yaml }}"
+- name: Create config file
+  when: room_assistant_config is defined
+  copy:
+    dest: "~/room-assistant/config/local.yml"
+    content: "{{ room_assistant_config | to_nice_yaml }}"
+- name: Find room-assistant
+  find:
+    file_type: link
+    paths:
+      - /usr/bin
+      - /usr/local/bin
+      - /opt/nodejs/bin
+    patterns: room-assistant
+  register: find_room_assistant
+- name: Create room-assistant service unit file
+  become: yes
+  copy:
+    dest: /etc/systemd/system/room-assistant.service
+    content: |
+      [Unit]
+      Description=room-assistant service
+
+      [Service]
+      ExecStart={{ find_room_assistant.files[0].path }}
+      WorkingDirectory={{ ansible_env.HOME }}/room-assistant
+      Restart=always
+      RestartSec=10
+      User={{ ansible_user }}
+
+      [Install]
+      WantedBy=multi-user.target
+- name: Start room-assistant service
+  become: yes
+  systemd:
+    name: room-assistant
+    enabled: yes
+    state: restarted

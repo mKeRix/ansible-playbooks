@@ -1,0 +1,15 @@
+---
+- name: Download NodeJS install script
+  get_url:
+    url: https://raw.githubusercontent.com/sdesalas/node-pi-zero/master/install-node-v.lts.sh
+    dest: ~/install-node.sh
+    mode: u=rwx,g=rw,o=rw
+- name: Install NodeJS
+  command: ~/install-node.sh
+  args:
+    creates: /usr/bin/node
+- name: Add npm module binaries to PATH
+  lineinfile:
+    dest: ~/.profile
+    state: present
+    line: 'PATH="$PATH:/opt/nodejs/bin"'
