@@ -14,6 +14,8 @@ The `room-assistant.yml` playbook allows you to install and manage a cluster of 
 all:
   hosts:
     'living-room.local':
+      ansible_user: pi
+      ansible_password: raspberry
       room_assistant_config: 
         global:
           integrations:
@@ -27,6 +29,8 @@ all:
               pin: 17
               deviceClass: motion
     'bedroom.local':
+      ansible_user: pi
+      ansible_password: raspberry
   vars:
     room_assistant_global_config:
       global:
@@ -42,6 +46,8 @@ all:
         addresses:
           - 'xx:xx:xx:xx:xx:xx'
 ```
+
+Note that instead of using user/password you can also use public key authentication if you previously setup your Pis to allow this.
 
 #### Options
 
