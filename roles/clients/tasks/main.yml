@@ -1,0 +1,7 @@
+---
+- name: Stop room-assistant service
+  become: yes
+  systemd:
+    name: room-assistant
+    state: stopped
+  ignore_errors: True
