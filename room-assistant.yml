@@ -1,5 +1,13 @@
 ---
 - hosts: all
+  pre_tasks:
+    # ensures that network is stable
+    - name: Stop room-assistant service
+      become: yes
+      systemd:
+        name: room-assistant
+        state: stopped
+      ignore_errors: True
   roles:
     - nodejs
     - room-assistant
