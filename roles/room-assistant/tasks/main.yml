@@ -17,50 +17,47 @@
     global: yes
     unsafe_perm: yes
 - name: Find NodeJS
-  find:
-    paths:
-      - /usr/bin
-      - /usr/local/bin
-    patterns: node
-    follow: yes
+  stat:
+    path: /usr/bin/node
+    follow: no
+    get_attributes: no
+    get_checksum: no
+    get_mime: no
   register: find_node
 - name: Set node capabilities
   become: yes
   capabilities:
-    path: "{{ item.path }}"
+    path: "{{ find_node.stat.lnk_source|default(find_node.stat.path, true) }}"
     capability: cap_net_raw+eip
     state: present
-  with_items: "{{ find_node.files }}"
 - name: Find hcitool
-  find:
-    paths:
-      - /usr/bin
-      - /usr/local/bin
-    patterns: hcitool
-    follow: yes
+  stat:
+    path: /usr/bin/hcitool
+    follow: no
+    get_attributes: no
+    get_checksum: no
+    get_mime: no
   register: find_hcitool
 - name: Set hcitool capabilities
   become: yes
   capabilities:
-    path: "{{ item.path }}"
+    path: "{{ find_hcitool.stat.lnk_source|default(find_hcitool.stat.path, true) }}"
     capability: cap_net_raw+eip
     state: present
-  with_items: "{{ find_hcitool.files }}"
 - name: Find hciconfig
-  find:
-    paths:
-      - /usr/bin
-      - /usr/local/bin
-    patterns: hciconfig
-    follow: yes
+  stat:
+    path: /bin/hciconfig
+    follow: no
+    get_attributes: no
+    get_checksum: no
+    get_mime: no
   register: find_hciconfig
 - name: Set hciconfig capabilities
   become: yes
   capabilities:
-    path: "{{ item.path }}"
+    path: "{{ find_hciconfig.stat.lnk_source|default(find_hciconfig.stat.path, true) }}"
     capability: cap_net_admin+eip
     state: present
-  with_items: "{{ find_hciconfig.files }}"
 - name: Create config directory
   file:
     path: ~/room-assistant/config
