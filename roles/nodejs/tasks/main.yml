@@ -3,6 +3,6 @@
 - import_role:
     name: geerlingguy.nodejs
   vars:
-    nodejs_version: "12.x"
+    nodejs_version: "14.x"
   become: yes
   when: ansible_architecture != 'armv6l'
