@@ -62,16 +62,19 @@
   file:
     path: ~/room-assistant/config
     state: directory
+    mode: 0755
 - name: Create global config file
   when: room_assistant_global_config is defined
   copy:
     dest: "~/room-assistant/config/{{ ansible_hostname }}.yml"
-    content: "{{ room_assistant_global_config | to_nice_yaml }}"
+    content: "{{ room_assistant_global_config | to_nice_yaml(indent=2) }}"
+    mode: 0644
 - name: Create config file
   when: room_assistant_config is defined
   copy:
     dest: "~/room-assistant/config/local.yml"
-    content: "{{ room_assistant_config | to_nice_yaml }}"
+    content: "{{ room_assistant_config | to_nice_yaml(indent=2) }}"
+    mode: 0644
 - name: Find room-assistant
   find:
     file_type: link
@@ -98,6 +101,7 @@
 
       [Install]
       WantedBy=multi-user.target
+    mode: 0644
 - name: Start room-assistant service
   become: yes
   systemd:

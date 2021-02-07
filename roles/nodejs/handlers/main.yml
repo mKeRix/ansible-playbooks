@@ -1,0 +1,44 @@
+---
+- name: Get current user info
+  listen: "Reinstall NodeJS"
+  getent:
+    database: passwd
+    key: '{{ ansible_user_id }}'
+- name: Uninstall old NodeJS version
+  listen: "Reinstall NodeJS"
+  become: yes
+  file:
+    state: absent
+    path: /opt/nodejs
+- name: Prepare NodeJS destination
+  listen: "Reinstall NodeJS"
+  become: yes
+  file:
+    state: directory
+    path: /opt/nodejs
+    owner: '{{ getent_passwd[ansible_user_id].1 }}'
+    group: '{{ getent_passwd[ansible_user_id].2 }}'
+    mode: 0755
+- name: Install NodeJS
+  listen: "Reinstall NodeJS"
+  unarchive:
+    src: '~/node-{{ nodejs_armv6l_version }}-linux-armv6l.tar.gz'
+    dest: /opt/nodejs
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+- name: Link NodeJS
+  listen: "Reinstall NodeJS"
+  file:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    state: link
+  loop:
+    - { src: /opt/nodejs/bin/node, dest: /usr/bin/node }
+    - { src: /opt/nodejs/bin/node, dest: /usr/sbin/node }
+    - { src: /opt/nodejs/bin/node, dest: /sbin/node }
+    - { src: /opt/nodejs/bin/node, dest: /usr/local/bin/node }
+    - { src: /opt/nodejs/bin/npm, dest: /usr/bin/npm }
+    - { src: /opt/nodejs/bin/npm, dest: /usr/sbin/npm }
+    - { src: /opt/nodejs/bin/npm, dest: /sbin/npm }
+    - { src: /opt/nodejs/bin/npm, dest: /usr/local/bin/npm }
