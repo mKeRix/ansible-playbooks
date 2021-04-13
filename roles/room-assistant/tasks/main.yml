@@ -16,6 +16,11 @@
     version: "{{ room_assistant_version }}"
     global: yes
     unsafe_perm: yes
+- name: Install peer dependencies
+  npm:
+    name: "{{ item }}"
+    global: yes
+  loop: "{{ room_assistant_peer_dependencies }}"
 - name: Find NodeJS
   stat:
     path: /usr/bin/node

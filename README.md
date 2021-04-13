@@ -51,9 +51,10 @@ Note that instead of using user/password you can also use public key authenticat
 
 #### Options
 
-| Variable                       | Default  | Description                                                  |
-| ------------------------------ | -------- | ------------------------------------------------------------ |
-| `room_assistant_version`       | `latest` | The version of room-assistant to install, as denoted on [npm](https://www.npmjs.com/package/room-assistant). |
-| `room_assistant_global_config` |          | A room-assistant config that should be used across all instances. |
-| `room_assistant_config`        |          | A room-assistant config for specific hosts. Options that are also in the global config will be overridden. |
+| Variable                           | Default  | Description                                                  |
+| ---------------------------------- | -------- | ------------------------------------------------------------ |
+| `room_assistant_version`           | `latest` | The version of room-assistant to install, as denoted on [npm](https://www.npmjs.com/package/room-assistant). |
+| `room_assistant_peer_dependencies` | `[]`     | List of npm dependency names that you may want to install in addition to room-assistant. |
+| `room_assistant_global_config`     |          | A room-assistant config that should be used across all instances. |
+| `room_assistant_config`            |          | A room-assistant config for specific hosts. Options that are also in the global config will be overridden. |
 
