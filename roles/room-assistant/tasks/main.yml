@@ -5,6 +5,7 @@
     update_cache: yes
     pkg:
       - libavahi-compat-libdnssd-dev
+      - libsystemd-dev
       - bluetooth
       - libbluetooth-dev
       - libudev-dev
@@ -103,10 +104,14 @@
       Description=room-assistant service
 
       [Service]
+      Type=notify
       ExecStart={{ find_room_assistant.files[0].path }}
       WorkingDirectory={{ ansible_env.HOME }}/room-assistant
+      TimeoutStartSec=120
+      TimeoutStopSec=30
       Restart=always
       RestartSec=10
+      WatchdogSec=60
       User={{ ansible_user }}
 
       [Install]
