@@ -97,6 +97,7 @@
   register: find_room_assistant
 - name: Create room-assistant service unit file
   become: yes
+  register: unit_file
   copy:
     dest: /etc/systemd/system/room-assistant.service
     content: |
@@ -123,3 +124,4 @@
     name: room-assistant
     enabled: yes
     state: restarted
+    daemon_reload: "{{ unit_file.changed }}"
