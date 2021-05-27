@@ -9,6 +9,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Lint Ansible Playbooks
-      uses: ansible/ansible-lint-action@818251b0717eb7925652556b7962c98dfdaea1e4
+      uses: ansible/ansible-lint-action@v4.1.0.post0
       with:
         targets: "room-assistant.yml"
