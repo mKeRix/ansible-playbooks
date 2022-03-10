@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  strategy: free
   pre_tasks:
     # ensures that network is stable
     - name: Stop room-assistant service
