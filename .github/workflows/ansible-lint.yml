@@ -12,3 +12,5 @@ jobs:
       uses: ansible/ansible-lint-action@master
       with:
         targets: "room-assistant.yml"
+        override-deps: |
+          rich>=9.5.1,<11.0.0
