@@ -37,7 +37,7 @@
   register: find_node
 - name: Set node capabilities
   become: yes
-  capabilities:
+  community.general.capabilities:
     path: "{{ find_node.stat.lnk_source|default(find_node.stat.path, true) }}"
     capability: cap_net_raw+eip
     state: present
@@ -51,7 +51,7 @@
   register: find_hcitool
 - name: Set hcitool capabilities
   become: yes
-  capabilities:
+  community.general.capabilities:
     path: "{{ find_hcitool.stat.lnk_source|default(find_hcitool.stat.path, true) }}"
     capability: cap_net_raw+eip
     state: present
@@ -65,7 +65,7 @@
   register: find_hciconfig
 - name: Set hciconfig capabilities
   become: yes
-  capabilities:
+  community.general.capabilities:
     path: "{{ find_hciconfig.stat.lnk_source|default(find_hciconfig.stat.path, true) }}"
     capability: cap_net_admin+eip
     state: present
