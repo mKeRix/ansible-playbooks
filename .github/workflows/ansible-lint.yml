@@ -9,8 +9,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Lint Ansible Playbooks
-      uses: ansible/ansible-lint-action@master
+      uses: ansible/ansible-lint-action@v6
       with:
         targets: "room-assistant.yml"
-        override-deps: |
-          rich>=9.5.1,<11.0.0
